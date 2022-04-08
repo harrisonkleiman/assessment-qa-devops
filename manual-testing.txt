@@ -1,0 +1,43 @@
+-> 1 test case
+-> 1 bug report
+-> Another case
+
+
+Test Plan: Duel Duo
+
+Test_Case_1 Draw Button Functionality:
+------------------------------------
+-> This test will verify that the draw button 'draws' 5 bot cards
+-> Navigate to http://localhost:3000
+-> Click the draw button on screen
+-> 5 cards should display, you will then select 2 cards
+
+Post Conditions:
+----------------
+-> 4/8
+-> Execution Environment: Chrome 100.xx.xxx
+-> macOS Monterey
+
+Bug Report:
+-----------
+-> Ran tests for Duel Duo
+  -> Failed: 1
+      -> Draw Card Function
+      -> Pass Rate:
+-> Coverage:
+  -> Search functions of Duel Duo
+  -> Follow up week of 4/11
+
+
+Test_Case_2 "Shuffle Array" Functionality:
+-----------------------------------------
+-> This test will verify that the 'shuffle array' functions as intended
+-> Navigate to http://localhost:3000
+-> Same items should be maintained in array
+-> Are items shuffled as intended?
+
+Post Conditions:
+----------------
+-> 4/8
+-> Execution Environment: Chrome 100.xx.xxx
+-> macOS Monterey
