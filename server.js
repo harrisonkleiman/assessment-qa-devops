@@ -7,7 +7,25 @@ const {shuffleArray} = require('./utils')
 
 // ----middleware----
 app.use(express.json())
-app.use(express.static(path.join(__dirname, "/public/dist/public")))
+
+// ----Top-level middleware----
+app.use(express.static("public"))
+
+// ----Establish entry point of application----
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'))
+})
+
+// ----Endpoints----
+app.get('/styles', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.css'))
+})
+
+app.get('/js', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.js'))
+})
+
+
 
 // ----Rollbar message----
 // include and initialize the rollbar library with your access token
@@ -23,19 +41,14 @@ rollbar.log("Hello world!")
 
 // ----Rollbar Event Handler 1----
 rollbar.errorHandler(function (err, req, res) {
-  console.log("Rollbar errorHandler:", err)
-  req.body = {
-    message: "Rollbar errorHandler: " + err,
-    level: "error",
-  }
+    console.log("Rollbar error handler called")
+    console.log(err)
 })
 
 // ----Rollbar Event Handler 2----
 rollbar.infoHandler(function (info, req, res) {
-  console.log("Rollbar infoHandler:", info)
-  req.body = info
-  console.log("req.body:", req.body)
-  res.send(req.body)
+  console.log("Rollbar info handler called")
+  console.log(info)
 })
 
 // ----Rollbar Event Handler 3----
@@ -46,27 +59,17 @@ rollbar.warningHandler(function (warning, req, res) {
 // ----Rollbar Event Handler 4----
 rollbar.criticalHandler(function (critical, req, res) {
   console.log("Rollbar criticalHandler:", critical)
-  req.body = {
-    message: "Rollbar criticalHandler:",
-    critical: critical,
+
+  rollbar.critical(critical)
+})
+
+app.get("/api/robots", (req, res) => {
+  try {
+    res.status(200).send(bots)
+  } catch (error) {
+    console.log("ERROR GETTING BOTS", error)
+    res.sendStatus(400)
   }
-  res.send(req.body)
-})
-
-
-
-app.get('/api/bots', (req, res) => {
-    res.json(bots)
-})
-
-
-app.get('/api/robots', (req, res) => {
-    try {
-        res.status(200).send(botsArr)
-    } catch (error) {
-        console.log('ERROR GETTING BOTS', error)
-        res.sendStatus(400)
-    }
 })
 
 app.get('/api/robots/five', (req, res) => {
