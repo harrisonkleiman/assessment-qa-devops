@@ -7,9 +7,7 @@ const {shuffleArray} = require('./utils')
 
 // ----middleware----
 app.use(express.json())
-app.use(express.static(path.join(__dirname, '/public/index.html')))
-app.use(express.static(path.join(__dirname, '/public/index.css')))
-app.use(express.static(path.join(__dirname, '/public/index.js')))
+app.use(express.static(path.join(__dirname, "../public")))
 
 // ----Rollbar message----
 // include and initialize the rollbar library with your access token
