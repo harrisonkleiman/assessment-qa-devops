@@ -5,13 +5,46 @@ const {bots, playerRecord} = require('./data')
 const {shuffleArray} = require('./utils')
 
 
-// middleware
+// ----middleware----
 app.use(express.json())
 app.use(express.static(path.join(__dirname, '/public/index.html')))
 app.use(express.static(path.join(__dirname, '/public/index.css')))
 app.use(express.static(path.join(__dirname, '/public/index.js')))
 
-// routes
+// ----Rollbar message----
+// include and initialize the rollbar library with your access token
+var Rollbar = require("rollbar");
+var rollbar = new Rollbar({
+  accessToken: 'f213f3fd2804490f9edc7241446b3249',
+  captureUncaught: true,
+  captureUnhandledRejections: true
+});
+
+// Record a generic message and send it to Rollbar
+rollbar.log("Hello world!");
+
+// ----Rollbar Event Handler 1----
+rollbar.errorHandler(function (err, req, res) {
+    console.log("Rollbar errorHandler:", err);
+});
+
+// ----Rollbar Event Handler 2----
+rollbar.infoHandler(function (info, req, res) {
+    console.log("Rollbar infoHandler:", info);
+});
+
+// ----Rollbar Event Handler 3----
+rollbar.debugHandler(function (debug, req, res) {
+    console.log("Rollbar debugHandler:", debug);
+});
+
+// ----Rollbar Event Handler 4----
+rollbar.criticalHandler(function (critical, req, res) { 
+    console.log("Rollbar criticalHandler:", critical);
+});
+
+
+// ----Routes----
 app.get('/api/bots', (req, res) => {
     res.json(bots)
 })
