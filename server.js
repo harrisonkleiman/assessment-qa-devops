@@ -7,43 +7,54 @@ const {shuffleArray} = require('./utils')
 
 // ----middleware----
 app.use(express.json())
-app.use(express.static(path.join(__dirname, "../public")))
-app.use(express.static(path.join(__dirname, "../dist")))
+app.use(express.static(path.join(__dirname, "/public/dist/public")))
 
 // ----Rollbar message----
 // include and initialize the rollbar library with your access token
-var Rollbar = require("rollbar");
+var Rollbar = require("rollbar")
 var rollbar = new Rollbar({
-  accessToken: 'f213f3fd2804490f9edc7241446b3249',
+  accessToken: "f213f3fd2804490f9edc7241446b3249",
   captureUncaught: true,
-  captureUnhandledRejections: true
-});
+  captureUnhandledRejections: true,
+})
 
-// Record a generic message and send it to Rollbar
-rollbar.log("Hello world!");
+// record a generic message and send it to Rollbar
+rollbar.log("Hello world!")
 
 // ----Rollbar Event Handler 1----
 rollbar.errorHandler(function (err, req, res) {
-    console.log("Rollbar errorHandler:", err);
-});
+  console.log("Rollbar errorHandler:", err)
+  req.body = {
+    message: "Rollbar errorHandler: " + err,
+    level: "error",
+  }
+})
 
 // ----Rollbar Event Handler 2----
 rollbar.infoHandler(function (info, req, res) {
-    console.log("Rollbar infoHandler:", info);
-});
+  console.log("Rollbar infoHandler:", info)
+  req.body = info
+  console.log("req.body:", req.body)
+  res.send(req.body)
+})
 
 // ----Rollbar Event Handler 3----
-rollbar.debugHandler(function (debug, req, res) {
-    console.log("Rollbar debugHandler:", debug);
-});
+rollbar.warningHandler(function (warning, req, res) {
+  console.log("Rollbar warningHandler:", warning)
+})
 
 // ----Rollbar Event Handler 4----
-rollbar.criticalHandler(function (critical, req, res) { 
-    console.log("Rollbar criticalHandler:", critical);
-});
+rollbar.criticalHandler(function (critical, req, res) {
+  console.log("Rollbar criticalHandler:", critical)
+  req.body = {
+    message: "Rollbar criticalHandler:",
+    critical: critical,
+  }
+  res.send(req.body)
+})
 
 
-// ----Routes----
+
 app.get('/api/bots', (req, res) => {
     res.json(bots)
 })
